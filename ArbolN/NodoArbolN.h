@@ -12,6 +12,7 @@ class NodoArbolN
         NodoArbolN<Elemento> *hijoIzq, *hnoDer;
     public:
         NodoArbolN();
+        NodoArbolN(Elemento e);
         NodoArbolN(Elemento e , NodoArbolN<Elemento> *i, NodoArbolN<Elemento>*d);
         void modInfo(Elemento e );
         void modIzq(NodoArbolN<Elemento> *i);
@@ -37,7 +38,12 @@ NodoArbolN<Elemento>::NodoArbolN(Elemento e, NodoArbolN<Elemento> *i, NodoArbolN
 	this->hijoIzq = i;
     this->hnoDer = d;
 }
+template <class Elemento>
+NodoArbolN<Elemento>::NodoArbolN(Elemento e)
+{
+	this->info = e;
 
+}
 template<class Elemento>
 Elemento NodoArbolN<Elemento>::obtInfo()
 {
