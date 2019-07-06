@@ -4,7 +4,7 @@ using namespace std;
 int main()
 {
     NodoArbolN<int> a;
-    a.modInfo(5);
+    a.modInfo(18881);
     cout<<a.obtInfo()<<endl;
 
 }
