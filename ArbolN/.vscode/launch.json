@@ -9,7 +9,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/ArbolN/test",
+            "program": "${workspaceFolder}/test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
