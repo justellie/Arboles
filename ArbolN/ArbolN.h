@@ -23,6 +23,12 @@ class ArbolN
         void recorridoPreorden(NodoArbolN<Elemento> *, list<Elemento> &);
         void recorridoPostorden(NodoArbolN<Elemento> *, list<Elemento> &);
         void encontrarPadre(NodoArbolN<Elemento> *, Elemento , Elemento& , bool &);
+        int  cantidadHijos(NodoArbolN<Elemento>* );
+        void destruirnodos(NodoArbolN<Elemento> *);
+        Elemento obtPadre(Elemento key);
+
+
+
     public:
         ArbolN();
         void copiar(const ArbolN<Elemento>&);
@@ -39,7 +45,8 @@ class ArbolN
         list<Elemento> Niveles();
         list<Elemento> Preorden();
         list<Elemento> Postorden();
-        Elemento obtPadre(Elemento key);
+        void primos(Elemento );
+
 
 
 
@@ -268,13 +275,14 @@ Elemento ArbolN<Elemento>::obtPadre(Elemento key)
 {
     Elemento Padre;
     bool logico;
+    Padre=this->nodoRaiz->obtInfo();
 
     if(encontrarNodo(this->nodoRaiz,key)!=NULL)
     {
         encontrarPadre(this->nodoRaiz,key,Padre,logico);
     
     }
-    return(Encontrado);
+    return(Padre);
 }
 
 template <class Elemento >
@@ -287,22 +295,20 @@ void ArbolN<Elemento>::recorridoNiveles(list<Elemento> &recorrido)
     hijos.push_back(this->nodoRaiz);//El comportamiento de esta lista es como una cola
     recorrido.push_back(this->nodoRaiz->obtInfo());//Aqui es introducido la informacion de los nodos
  
-    //cout<<this->nodoRaiz->obtInfo()<<endl;
-    //cout<<" "<<endl;
     
     while(!hijos.empty())//mientras la lista de nodos no sea vacia
     {
-        
+       
         aux = hijos.front()->obtIzq();//obtenemos el hijo del nodo que esta en el frente de nuestra lista
         while(aux != NULL)//mientras existan nodos en ese nivel
         {
+
             hijos.push_back(aux);//encolamos los nodos en la lista de Hijos
             recorrido.push_back(aux->obtInfo());//encolamos la informacion
-            //cout<<aux->obtInfo()<<endl;
+            cout<<aux->obtInfo()<<endl;
             aux = aux->obtDer();//nos movemos al hermano
         }
-    
-        //cout<<" "<<endl;
+        
         hijos.pop_front();// nos movemos al proximo nivel
     }
 }
@@ -357,6 +363,144 @@ list<Elemento> ArbolN<Elemento>::Postorden()
 
     return post;
 }
+template <class Elemento>
+int ArbolN<Elemento>::cantidadHijos(NodoArbolN<Elemento>* Nodo)
+{
+    int cont=0;
+    NodoArbolN<Elemento> * aux;
+    if(Nodo!=NULL)
+    {
+        aux=Nodo;
+        aux=aux->obtIzq();
+        cont+=1;
+        while(aux!=NULL)
+        {
+            cont+=1;
+            aux=aux->obtDer();
+        }
+        cont-=1;
+
+    }
+    else
+    {
+        cont=-1;
+    }
+    return(cont);
+    
+} 
+
+
+
+
+
+
+
+
+template <class Elemento >
+void ArbolN<Elemento>::primos(Elemento key)
+{
+    list<NodoArbolN<Elemento> *> hijos;// Una lista de NODOS que sera por la cual nos vamos a mover para obtener nuestros nodo por nivel
+    NodoArbolN<Elemento> *aux,*nodopadre,*nodoAbuelo ,*final;//
+    int nivel, auxN;
+    Elemento padre, abuelo;
+    padre=this->obtPadre(key);
+    abuelo=this->obtPadre(padre);
+    cout<<"Padre: "<<padre<<endl;
+    cout<<"Abuelo "<<abuelo<<endl;
+    nodopadre=this->encontrarNodo(this->nodoRaiz,padre);
+    nodoAbuelo=this->encontrarNodo(this->nodoRaiz,abuelo);
+    hijos.push_back(nodoAbuelo);//El comportamiento de esta lista es como una cola
+    nivel=0;
+    while(!hijos.empty()&&nivel!=2)//mientras la lista de nodos no sea vacia
+    {
+        auxN=this->cantidadHijos(hijos.front());
+        aux = hijos.front()->obtIzq();//obtenemos el hijo del nodo que esta en el frente de nuestra lista
+        while(aux != NULL)//mientras existan nodos en ese nivel
+        {
+            if(aux==nodopadre)
+            {
+                aux = aux->obtDer();//nos movemos al hermano
+            }
+            hijos.push_back(aux);//encolamos los nodos en la lista de Hijos
+            if(nivel==1)
+            {
+                cout<<aux->obtInfo()<<endl;
+            }
+            final=aux;
+            aux = aux->obtDer();//nos movemos al hermano
+            if(hijos.front()==this->nodoRaiz)
+            {
+                if(auxN==1)
+                {
+                    nivel+=1;
+                }
+                auxN-=1;
+            }
+        }
+        cout<<"Hijos de "<< this->obtPadre(final->obtInfo())<<endl;
+        if(auxN==1)
+            {
+                nivel+=1;
+                if(nivel==2)
+                {
+                    cout<<"Ese fue el nivel: "<<nivel<<endl;
+                }       
+            }
+            auxN-=1;        
+        hijos.pop_front();// nos movemos al proximo nivel
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

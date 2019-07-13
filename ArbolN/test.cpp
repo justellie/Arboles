@@ -25,8 +25,7 @@ int main()
     arbolito.InsertarElemento(7,3);
     arbolito.esta(2);
     arbolito.InsertarElemento(8,4);
-    padre=arbolito.obtPadre(8);
-    cout<<padre<<endl;
+    arbolito.primos(45);
   
     
 
