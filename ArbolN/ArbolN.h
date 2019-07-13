@@ -22,7 +22,7 @@ class ArbolN
         void recorridoNiveles(list<Elemento> &);
         void recorridoPreorden(NodoArbolN<Elemento> *, list<Elemento> &);
         void recorridoPostorden(NodoArbolN<Elemento> *, list<Elemento> &);
-
+        void encontrarPadre(NodoArbolN<Elemento> *, Elemento , Elemento& , bool &);
     public:
         ArbolN();
         void copiar(const ArbolN<Elemento>&);
@@ -39,6 +39,8 @@ class ArbolN
         list<Elemento> Niveles();
         list<Elemento> Preorden();
         list<Elemento> Postorden();
+        Elemento obtPadre(Elemento key);
+
 
 
 
@@ -207,9 +209,46 @@ NodoArbolN<Elemento>* ArbolN<Elemento>::encontrarNodo(NodoArbolN<Elemento> *raiz
       return encontrado;
   }
   
-  // if not found we recurse on the children
   return encontrarNodo(raiz->obtIzq(), key);
 }
+
+template <class Elemento>
+void ArbolN<Elemento>::encontrarPadre(NodoArbolN<Elemento> *raiz, Elemento key, Elemento& prev, bool &band ){
+
+
+if (raiz!=NULL)
+{
+           
+    
+  
+    if (raiz->obtInfo()==key)
+    {
+          
+          band=true;
+          
+
+    } 
+    
+    encontrarPadre(raiz->obtDer(),key,prev,band);
+    if ( !band ) 
+    {
+        prev=raiz->obtInfo();
+        encontrarPadre(raiz->obtIzq(),key,prev,band);     
+    }
+  
+}     
+}
+
+
+
+
+
+
+
+
+
+
+
 template <class Elemento>
 void ArbolN<Elemento>::esta(Elemento key)
 {
@@ -223,6 +262,21 @@ void ArbolN<Elemento>::esta(Elemento key)
         cout<<"No encontrado el elemento "<< key<<endl;
     }
 }
+
+template <class Elemento>
+Elemento ArbolN<Elemento>::obtPadre(Elemento key)
+{
+    Elemento Padre;
+    bool logico;
+
+    if(encontrarNodo(this->nodoRaiz,key)!=NULL)
+    {
+        encontrarPadre(this->nodoRaiz,key,Padre,logico);
+    
+    }
+    return(Encontrado);
+}
+
 template <class Elemento >
 void ArbolN<Elemento>::recorridoNiveles(list<Elemento> &recorrido)
 {

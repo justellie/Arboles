@@ -10,6 +10,7 @@ int main()
 {
     
     ArbolN<int> arbolito;
+    int padre;
     arbolito.esta(1);
     arbolito.InsertarElemento(1);
     arbolito.InsertarElemento(2,88);
@@ -24,7 +25,10 @@ int main()
     arbolito.InsertarElemento(7,3);
     arbolito.esta(2);
     arbolito.InsertarElemento(8,4);
-    arbolito.Niveles();
+    padre=arbolito.obtPadre(8);
+    cout<<padre<<endl;
+  
+    
 
 
     
