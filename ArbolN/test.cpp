@@ -8,7 +8,7 @@ using namespace std;
 int main()
 {
     
-    ArbolN<long int> arbolito;
+    ArbolN<long int> arbolito,arbolito2;
     arbolito.InsertarRaiz(0);
     long int i,j;
     for(i=1;i<100;i++)
@@ -32,7 +32,8 @@ int main()
             arbolito.InsertarElemento(i,j);
         }
     }
-  
+    arbolito2=arbolito;
+    cout<<(arbolito2==arbolito)<<endl;
 
    
     //arbolito.primos("Jesus");

@@ -25,25 +25,37 @@ class ArbolN
         void destruirnodos(NodoArbolN<Elemento> *);
         Elemento obtPadre(Elemento key) const;
         int altura(NodoArbolN<Elemento> *) const;
+        bool esIgual(NodoArbolN<Elemento> *, NodoArbolN<Elemento> *); 
 
 
 
     public:
+        /*Constructor */
         ArbolN();
+        /*Metodo de copiado */
         void copiar(const ArbolN<Elemento>&);
+        /*Metodos funcionales */
         bool esVacio() const ; 
         int altura() const;
         bool esta(Elemento key) const ;
-        Elemento raiz() const;
+        bool esIgual(const ArbolN<Elemento> &); 
+        Elemento raiz();
+        /*Metodos de vaciado */
         void Vaciar();
         ~ArbolN(){this->Vaciar();};
+        /*Metodos de insertado */
         void InsertarElemento(const Elemento &padre,const Elemento &e){this->insertar(padre, e);};
         void InsertarRaiz(const Elemento &); 
         void insertarSubarbol(ArbolN<Elemento>);
+        /*Metodos de recorrido */
         list< ArbolN<Elemento> > hijos() const;
         list<Elemento> Niveles();
-        list<Elemento> Preorden() const;
-        list<Elemento> Postorden() const;
+        list<Elemento> Preorden() ;
+        list<Elemento> Postorden() ;
+        /*Operadores */
+        bool operator==(const ArbolN<Elemento> &a);
+        void operator=(const ArbolN<Elemento> &a);
+
         //void primos(Elemento );
         
 
@@ -81,7 +93,7 @@ NodoArbolN<Elemento>* ArbolN<Elemento>::copiarNodos(NodoArbolN<Elemento>* p)
 template <class Elemento>
 void ArbolN<Elemento>::copiar(const ArbolN<Elemento>& a)
 {
-    this->nodoRaiz=copiarNodos(a->nodoRaiz);
+    this->nodoRaiz=copiarNodos(a.nodoRaiz);
 }
 /****************************ALGORITMOS DE FUNCIONALIDADES******************************************************** */
 template <class Elemento>
@@ -90,7 +102,7 @@ bool ArbolN<Elemento>::esVacio() const
     return(this->nodoRaiz==NULL);
 }
 template <class Elemento>
-Elemento ArbolN<Elemento>::raiz() const
+Elemento ArbolN<Elemento>::raiz() 
 {
     return(this->nodoRaiz->obtInfo());
 }
@@ -169,6 +181,48 @@ int ArbolN<Elemento>::altura(NodoArbolN<Elemento> *a) const
 	}
 }
 
+
+
+template <class Elemento>
+bool ArbolN<Elemento>::operator==(const ArbolN<Elemento> &a)
+{
+	return this->esIgual(a);
+}
+
+template <class Elemento>
+bool ArbolN<Elemento>::esIgual(NodoArbolN<Elemento> *a, NodoArbolN<Elemento> *b) 
+{
+	if(a == NULL && b == NULL)
+		return true;
+	else if((a == NULL && b != NULL) || (a != NULL && b == NULL))
+		return false;
+	else if(a->obtInfo() != b->obtInfo())
+		return false;
+	else
+		return this->esIgual(a->obtIzq(), b->obtIzq()) && this->esIgual(a->obtDer(), b->obtDer());
+}
+
+template <class Elemento>
+bool ArbolN<Elemento>::esIgual(const ArbolN<Elemento> &a) 
+{
+	return this->esIgual(this->nodoRaiz, a.nodoRaiz);
+}
+template <class Elemento>
+void ArbolN<Elemento>::operator=(const ArbolN<Elemento> &a)
+{
+	if(this != &a)
+	{
+		this->Vaciar();
+		this->copiar(a);
+	}
+}
+
+template <class Elemento>
+bool ArbolN<Elemento>::esta(Elemento key) const
+{
+    return(encontrarNodo(this->nodoRaiz,key)==NULL);
+   
+}
 /*********************************************************ALGORITMOS DE VACIADO************************************************************************* */
 
 template <class Elemento>
@@ -307,22 +361,6 @@ void ArbolN<Elemento>::encontrarPadre(NodoArbolN<Elemento> *raiz, Elemento key, 
 }
 
 
-
-
-
-
-
-
-
-
-
-template <class Elemento>
-bool ArbolN<Elemento>::esta(Elemento key) const
-{
-    return(encontrarNodo(this->nodoRaiz,key)==NULL);
-   
-}
-
 template <class Elemento>
 Elemento ArbolN<Elemento>::obtPadre(Elemento key) const
 {
@@ -390,7 +428,7 @@ void ArbolN<Elemento>::recorridoPreorden(NodoArbolN<Elemento> *raiz, list<Elemen
 }
 
 template <class Elemento>
-list<Elemento> ArbolN<Elemento>::Preorden() const
+list<Elemento> ArbolN<Elemento>::Preorden() 
 {
     list<Elemento> preorden;
 
@@ -410,7 +448,7 @@ void ArbolN<Elemento>::recorridoPostorden(NodoArbolN<Elemento> *raiz, list<Eleme
 }
 
 template <class Elemento>
-list<Elemento> ArbolN<Elemento>::Postorden() const
+list<Elemento> ArbolN<Elemento>::Postorden() 
 {
     list<Elemento> post;
 
