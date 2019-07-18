@@ -1,7 +1,6 @@
 #include <iostream>
 #include "NodoArbolN.h"
 #include "ArbolN.h"
-#include "Listas.h"
 #include <list>
 
 using std::list;
@@ -9,23 +8,20 @@ using namespace std;
 int main()
 {
     
-    ArbolN<int> arbolito;
-    int padre;
-    arbolito.esta(1);
-    arbolito.InsertarElemento(1);
-    arbolito.InsertarElemento(2,88);
-    arbolito.InsertarElemento(2,45);
-    arbolito.InsertarElemento(2,878);
-    arbolito.esta(1);
-    arbolito.InsertarElemento(1,6);
-    arbolito.esta(6);
-    arbolito.InsertarElemento(1,7);
-    arbolito.InsertarElemento(6,8);
-    arbolito.InsertarElemento(6,800);
-    arbolito.InsertarElemento(7,3);
-    arbolito.esta(2);
-    arbolito.InsertarElemento(8,4);
-    arbolito.primos(45);
+    ArbolN<string> arbolito;
+    arbolito.InsertarRaiz("papa");
+    arbolito.InsertarElemento("Maria","Luis");
+    arbolito.InsertarElemento("Maria","Ana");
+    arbolito.InsertarElemento("Maria","Jose");
+    arbolito.InsertarElemento("Luis","Miguel");
+    arbolito.InsertarElemento("Luis","Jesus");
+    arbolito.InsertarElemento("Ana","Patricia");
+    arbolito.InsertarElemento("Jose","Alejandra");
+    arbolito.InsertarElemento("Jose","Carlos");
+    arbolito.InsertarElemento("Jose","Andreina");
+
+   
+    //arbolito.primos("Jesus");
   
     
 
