@@ -160,11 +160,11 @@ void ArbolN<Elemento>::printHijosNivel(NodoArbolN<Elemento>* Nodo)
 {
     Elemento p;
     NodoArbolN<Elemento> * aux, *padre;
+    bool band=false;
     p=this->obtPadre(Nodo->obtInfo());
     padre=this->encontrarNodo(this->nodoRaiz,p);
     if(padre!=NULL)
     {
-        aux=padre;
         while(padre!=NULL)
         {
             aux=padre;
@@ -173,17 +173,23 @@ void ArbolN<Elemento>::printHijosNivel(NodoArbolN<Elemento>* Nodo)
             while(aux!=NULL)
             {   
                 
-                if(aux!=Nodo)  
+                if((aux != Nodo)&& (aux->obtIzq()!=NULL))  
                 {   
                     this->printHijosNodo(aux);          
                     cout<<"Hijos((as) de "<<aux->obtInfo()<<")"<<endl;
+                    band=true;
                 }
                 aux=aux->obtDer();
                 
             }
             padre=padre->obtDer();
         }
-    }    
+        if(!band)
+        {
+            cout<<"No tiene primos"<<endl;
+        } 
+    }
+       
 } 
 
 
@@ -529,8 +535,9 @@ void ArbolN<Elemento>::primos(Elemento e)
  NodoArbolN<Elemento> *nPadre;
  Elemento p;
  p=this->obtPadre(e);
+ 
  nPadre=this->encontrarNodo(this->nodoRaiz,p);
-  cout<<"Padre de: "<<e<<"Es: "<<p<<endl;
+  cout<<"Los primos de "<<e<<" Son: "<<endl;
  this->printHijosNivel(nPadre);
     
 }
