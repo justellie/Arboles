@@ -2,7 +2,6 @@
 #define ARBOLN_H
 #include <iostream>
 #include "NodoArbolN.h"
-
 #include <list>
 #include <string>
 
@@ -25,6 +24,7 @@ class ArbolN
         int  cantidadHijos(NodoArbolN<Elemento>* ) const;
         void destruirnodos(NodoArbolN<Elemento> *);
         Elemento obtPadre(Elemento key) const;
+        int altura(NodoArbolN<Elemento> *) const;
 
 
 
@@ -32,18 +32,20 @@ class ArbolN
         ArbolN();
         void copiar(const ArbolN<Elemento>&);
         bool esVacio() const ; 
+        int altura() const;
+        bool esta(Elemento key) const ;
         Elemento raiz() const;
-        list< ArbolN<Elemento> > hijos() const;
-        void insertarSubarbol(ArbolN<Elemento>);
         void Vaciar();
         ~ArbolN(){this->Vaciar();};
         void InsertarElemento(const Elemento &padre,const Elemento &e){this->insertar(padre, e);};
         void InsertarRaiz(const Elemento &); 
-        bool esta(Elemento key) const ;
-        list<Elemento> Niveles() const;
+        void insertarSubarbol(ArbolN<Elemento>);
+        list< ArbolN<Elemento> > hijos() const;
+        list<Elemento> Niveles();
         list<Elemento> Preorden() const;
         list<Elemento> Postorden() const;
-        void primos(Elemento );
+        //void primos(Elemento );
+        
 
 
 
@@ -134,6 +136,38 @@ list< ArbolN<Elemento> >  ArbolN<Elemento>::hijos() const
     }
     return(L);
 } 
+
+
+template <class Elemento>
+int ArbolN<Elemento>::altura() const
+{
+	return this->altura(this->nodoRaiz);
+}
+
+template <class Elemento>
+int ArbolN<Elemento>::altura(NodoArbolN<Elemento> *a) const
+{
+	NodoArbolN<Elemento> *h;
+	int mayor, aux;
+
+	if(a == NULL)
+		return 0;
+	else if(a->obtIzq() == NULL)
+		return 1;
+	else
+	{
+		mayor = altura(a->obtIzq());
+		h = a->obtIzq()->obtIzq();
+		while(h != NULL)
+		{
+			aux = altura(h);
+			h = h->obtDer();
+			if(aux > mayor)
+				mayor = aux;
+		}
+		return mayor + 1;
+	}
+}
 
 /*********************************************************ALGORITMOS DE VACIADO************************************************************************* */
 
@@ -335,12 +369,12 @@ void ArbolN<Elemento>::recorridoNiveles(list<Elemento> &recorrido)
 }
 
 template <class Elemento>
-list<Elemento> ArbolN<Elemento>::Niveles() const
+list<Elemento> ArbolN<Elemento>::Niveles() 
 {
     list<Elemento> niveles;
     if(this->nodoRaiz != NULL)
         this->recorridoNiveles(niveles);
-    return niveles;
+     return niveles;
 }
 
 

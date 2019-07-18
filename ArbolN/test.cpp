@@ -8,17 +8,31 @@ using namespace std;
 int main()
 {
     
-    ArbolN<string> arbolito;
-    arbolito.InsertarRaiz("papa");
-    arbolito.InsertarElemento("Maria","Luis");
-    arbolito.InsertarElemento("Maria","Ana");
-    arbolito.InsertarElemento("Maria","Jose");
-    arbolito.InsertarElemento("Luis","Miguel");
-    arbolito.InsertarElemento("Luis","Jesus");
-    arbolito.InsertarElemento("Ana","Patricia");
-    arbolito.InsertarElemento("Jose","Alejandra");
-    arbolito.InsertarElemento("Jose","Carlos");
-    arbolito.InsertarElemento("Jose","Andreina");
+    ArbolN<long int> arbolito;
+    arbolito.InsertarRaiz(0);
+    long int i,j;
+    for(i=1;i<100;i++)
+    {
+        for(j=i*6;j<100;j++)
+        {
+            arbolito.InsertarElemento(i,j);
+        }
+    }
+    for(i=37;i<100;i++)
+    {
+        for(j=i*6;j<100;j++)
+        {
+            arbolito.InsertarElemento(i,j);
+        }
+    }
+    for(i=60;i<100;i++)
+    {
+        for(j=i*6;j<100;j++)
+        {
+            arbolito.InsertarElemento(i,j);
+        }
+    }
+  
 
    
     //arbolito.primos("Jesus");
