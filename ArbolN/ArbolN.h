@@ -23,10 +23,12 @@ class ArbolN
         void encontrarPadre(NodoArbolN<Elemento> *, Elemento , Elemento& , bool &);
         int  cantidadHijos(NodoArbolN<Elemento>* ) const;
         void destruirnodos(NodoArbolN<Elemento> *);
-        Elemento obtPadre(Elemento key) const;
+        Elemento obtPadre(Elemento key) ;
         int altura(NodoArbolN<Elemento> *) const;
         bool esIgual(NodoArbolN<Elemento> *, NodoArbolN<Elemento> *); 
-
+        /*Impresion */
+        void printHijosNivel(NodoArbolN<Elemento>* Nodo);
+        void printHijosNodo(NodoArbolN<Elemento>* Nodo);
 
 
     public:
@@ -55,9 +57,7 @@ class ArbolN
         /*Operadores */
         bool operator==(const ArbolN<Elemento> &a);
         void operator=(const ArbolN<Elemento> &a);
-
-        //void primos(Elemento );
-        
+        void primos(Elemento);
 
 
 
@@ -107,6 +107,9 @@ Elemento ArbolN<Elemento>::raiz()
     return(this->nodoRaiz->obtInfo());
 }
 
+
+
+
 template <class Elemento>
 int ArbolN<Elemento>::cantidadHijos(NodoArbolN<Elemento>* Nodo) const
 {
@@ -132,6 +135,63 @@ int ArbolN<Elemento>::cantidadHijos(NodoArbolN<Elemento>* Nodo) const
     return(cont);
     
 } 
+
+template <class Elemento>
+void ArbolN<Elemento>::printHijosNodo(NodoArbolN<Elemento>* Nodo) 
+{
+    
+    NodoArbolN<Elemento> * aux;
+    if(Nodo!=NULL)
+    {
+        aux=Nodo;
+        aux=aux->obtIzq();
+        
+        while(aux!=NULL)
+        {
+            cout<<aux->obtInfo()<<", ";
+            aux=aux->obtDer();
+        }
+        
+
+    }    
+} 
+template <class Elemento>
+void ArbolN<Elemento>::printHijosNivel(NodoArbolN<Elemento>* Nodo) 
+{
+    Elemento p;
+    NodoArbolN<Elemento> * aux, *padre;
+    p=this->obtPadre(Nodo->obtInfo());
+    padre=this->encontrarNodo(this->nodoRaiz,p);
+    if(padre!=NULL)
+    {
+        aux=padre;
+        while(padre!=NULL)
+        {
+            aux=padre;
+            aux=aux->obtIzq();
+        
+            while(aux!=NULL)
+            {   
+                
+                if(aux!=Nodo)  
+                {   
+                    this->printHijosNodo(aux);          
+                    cout<<"Hijos((as) de "<<aux->obtInfo()<<")"<<endl;
+                }
+                aux=aux->obtDer();
+                
+            }
+            padre=padre->obtDer();
+        }
+    }    
+} 
+
+
+
+
+
+
+
 
 template <class Elemento>
 list< ArbolN<Elemento> >  ArbolN<Elemento>::hijos() const
@@ -362,7 +422,7 @@ void ArbolN<Elemento>::encontrarPadre(NodoArbolN<Elemento> *raiz, Elemento key, 
 
 
 template <class Elemento>
-Elemento ArbolN<Elemento>::obtPadre(Elemento key) const
+Elemento ArbolN<Elemento>::obtPadre(Elemento key) 
 {
     Elemento Padre;
     bool logico;
@@ -398,7 +458,6 @@ void ArbolN<Elemento>::recorridoNiveles(list<Elemento> &recorrido)
 
             hijos.push_back(aux);               //encolamos los nodos en la lista de Hijos
             recorrido.push_back(aux->obtInfo());//encolamos la informacion
-            cout<<aux->obtInfo()<<endl;
             aux = aux->obtDer();                //nos movemos al hermano
         }
         
@@ -462,67 +521,20 @@ list<Elemento> ArbolN<Elemento>::Postorden()
 
 
 
-/* 
+
 
 template <class Elemento >
-void ArbolN<Elemento>::primos(Elemento key)
+void ArbolN<Elemento>::primos(Elemento e)
 {
-    list<NodoArbolN<Elemento> *> hijos;// Una lista de NODOS que sera por la cual nos vamos a mover para obtener nuestros nodo por nivel
-    NodoArbolN<Elemento> *aux,*nodopadre,*nodoAbuelo ,*final;//Apuntadores auxiliares
-    int nivel, auxN;            //contadores de nivel
-    Elemento padre, abuelo;                        //auxiliares para obtener el nodo padre y el abuelo
-    padre=this->obtPadre(key);
-    abuelo=this->obtPadre(padre);
-    cout<<"Padre: "<<padre<<endl;
-    cout<<"Abuelo "<<abuelo<<endl;
-    nodopadre=this->encontrarNodo(this->nodoRaiz,padre);//
-    nodoAbuelo=this->encontrarNodo(this->nodoRaiz,abuelo);
-    hijos.push_back(nodoAbuelo);                    //El comportamiento de esta lista es como una cola. Inicializamos el nodo con el abuelo ya que es el ancestro comun de todos los tios
-    nivel=0;                                        //llegaremos hasta el tercer nivel puesto que al tercer nivel se encuentran los primos
-    while(!hijos.empty())//mientras la lista de nodos no sea vacia y el nivel sea menor a 2
-    {
-        auxN=this->cantidadHijos(hijos.front());//obtenemos la cantidad de hijos del Abuelo
-        aux = hijos.front()->obtIzq();//obtenemos el hijo del nodo que esta en el frente de nuestra lista
-        while(aux != NULL)//mientras existan hijos de ese nodo en el que nos encontramos
-        {
-            //if(aux==nodopadre)//como queremos obviar los nodos hijos del padre eso nos dejara unicamente con los nodos primos y tios
-            //{
-            //    aux = aux->obtDer();//nos movemos al hermano cuando llegamos al nodo padre
-            //}
-            hijos.push_back(aux);//encolamos el en la lista de Hijos
-            //if(nivel==1)//si el nodo esta en el nivel 1 significa que es un primo asi que lo imprimimos
-            //{
-                cout<<aux->obtInfo()<<", ";
-                cout<< "Auxiliar de nivel "<<auxN<<" ";
-                cout<< "Nivel: "<<nivel<<" ";
-            //}
-            final=aux;//obtenemos este puntero para saber quien es el hijo del nodo 
-            aux = aux->obtDer();//nos movemos al hermano
-            if(hijos.front()==nodoAbuelo)//si nos encontramos al nivel 0,es decir el nivel 1 
-            {
-                if(auxN==1)//cuando solo nos quede un valor en el contador de hijos aumentamos el nivel 
-                {
-                    nivel+=1;
-                }
-                auxN-=1;//restamos uno al contador
-            }
-        }
-        //if(nivel>0)
-        //{
-            //cout<<"Hijos de "<< this->obtPadre(final->obtInfo())<<endl;// decimos de quien es hijo los nodos que acabos de ver
-        //}
-        hijos.pop_front();// nos movemos al proximo nivel
-        if(auxN==1)//cuando solo nos quede un valor en el contador de hijos aumentamos el nivel 
-            {
-                nivel+=1;      
-            }
-        auxN-=1;  
-        cout<<"Ese fue el nivel: "<<nivel<<endl;
-          
-       
-    }
+ NodoArbolN<Elemento> *nPadre;
+ Elemento p;
+ p=this->obtPadre(e);
+ nPadre=this->encontrarNodo(this->nodoRaiz,p);
+  cout<<"Padre de: "<<e<<"Es: "<<p<<endl;
+ this->printHijosNivel(nPadre);
+    
 }
-*/
+
 
 
 
