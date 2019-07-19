@@ -50,6 +50,16 @@ int main()
     arbolito.InsertarElemento(4,9);
     arbolito.InsertarElemento(4,10);
     arbolito.primos(6);
+    arbolito.InsertarElemento("Maria","Luis");
+    arbolito.InsertarElemento("Maria","Ana");
+    arbolito.InsertarElemento("Maria","Jose");
+    arbolito.InsertarElemento("Luis","Miguel");
+    arbolito.InsertarElemento("Luis","Jesus");
+    arbolito.InsertarElemento("Ana","Patricia");
+    arbolito.InsertarElemento("Jose","Alejandra");
+    arbolito.InsertarElemento("Jose","Carlos");
+    arbolito.InsertarElemento("Jose","Andreina");
+    arbolito.primos("Jesus");
    
     */
     cout << "\n"<< arbolito.altura();

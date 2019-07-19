@@ -17,20 +17,21 @@ class Arbin
 {
     private:
         NodoB<Elemento> *raiz;
+        int peso;
         /*** Estos métodos son recursivos qu necesitan ser privados para funcionar.
          *  Cada uno corresponde al respectivo método público al que hace referencia.  
          ***/
         
         /*Copia los nodos recursivamente de un arbol.*/
-        static NodoB<Elemento>* copiarNodos( NodoB<Elemento>* ptr);
+        static NodoB<Elemento>* copiarNodos( NodoB<Elemento>* ptr, int &nnodos);
         static int  altura(NodoB<Elemento>* ptr);
-        static void vaciar(NodoB<Elemento>* ptr);
+        static void vaciar(NodoB<Elemento>* ptr,int &nnodos);
         static void preorden(NodoB<Elemento>* ptr, list<Elemento> &prelist);
         static void postorden(NodoB<Elemento>* ptr, list<Elemento> &postlist);
         static void inorden(NodoB<Elemento>* ptr, list<Elemento> &inlist);
         static NodoB<Elemento>* leerPreIn(list<Elemento> &preorden,list<Elemento> &inorden);
         static NodoB<Elemento>* leerPostIn(list<Elemento> &postorden,list<Elemento> &inorden);
-
+        static void insertarNodo(NodoB<Elemento> *ptr, const Elemento &padre, const Elemento &hijo, bool &insertado);
     public:
 
     /***  Constructores  ***/
@@ -43,6 +44,10 @@ class Arbin
         void vaciar();
         /*Insertar un arbol como subarbol izq. Elimina el subarbol anterior*/
         void insHi(const Arbin<Elemento> &sub);
+        //Insertar hijos asumiendo qe padre exista
+        void insertarNodo(const Elemento &padre, const Elemento &hijo);
+        //Insertar la raiz
+        void insertarNodo(const Elemento &p){ this->raiz = new NodoB<Elemento>(p); this->peso += 1;}
         /*Insertar un arbol como subarbol der. Elimina el subarbol anterior*/
         void insHd(const Arbin<Elemento> &sub);
         /*Crea el arbol a partir de los recorridos inorden y preorden almacenados en
@@ -62,7 +67,8 @@ class Arbin
         Arbin<Elemento> obtHi() const;
         /*Retorna una copia del arbol derecho*/
         Arbin<Elemento> obtHd() const;
-        
+        /*Numero de elemetos en el arbol*/
+        int obtPeso() const;
         /*Retorna verdadero si la raiz no tiene hijos */
         bool esHoja() const;
         /*Retonra la altura, es decir el camino mas largo desde la raiz hasta una hoja */
@@ -81,6 +87,7 @@ template <class Elemento>
 Arbin<Elemento>::Arbin()
 {
     this->raiz = NULL;
+    this->peso = 0;
 }
 template <class Elemento>
 Arbin<Elemento>::Arbin(const Arbin<Elemento> &src)
@@ -90,11 +97,53 @@ Arbin<Elemento>::Arbin(const Arbin<Elemento> &src)
 template <class Elemento>
 void Arbin<Elemento>::copiar(const Arbin<Elemento> &src)
 {
-    this->raiz = copiarNodos(src.raiz);
+    int n = 0;
+    this->raiz = copiarNodos(src.raiz,n);
+    this->peso = src.peso;
+}
+template <class Elemento>
+void Arbin<Elemento>::insertarNodo(const Elemento &padre, const Elemento &hijo)
+{
+    bool insertado = false;
+    this->insertarNodo(this->raiz,padre,hijo,insertado);
+    if(insertado) this->peso += 1;
+}
+template <class Elemento>
+void Arbin<Elemento>::insertarNodo(NodoB<Elemento> *ptr, const Elemento &padre, const Elemento &hijo, bool &insertado)
+{
+    NodoB<Elemento> *nuevo;
+    if(ptr != NULL && !insertado)
+    {
+        if(ptr->obtInfo() == padre)
+        {
+            nuevo = new NodoB<Elemento>(hijo);
+            if(ptr->obtHi() == NULL)
+            {
+                ptr->modHi(nuevo);
+            }
+            else if(ptr->obtHd() == NULL)
+            {
+                 ptr->modHd(nuevo);
+            }
+            insertado = true;
+        }
+        else
+        {
+            insertarNodo(ptr->obtHi(),padre,hijo,insertado);
+            insertarNodo(ptr->obtHd(),padre,hijo,insertado);
+        }
+    }
 }
 
+
+
 template <class Elemento>
-NodoB<Elemento>* Arbin<Elemento>::copiarNodos(NodoB<Elemento>* ptr)
+int Arbin<Elemento>::obtPeso() const
+{
+    return this->peso;
+}
+template <class Elemento>
+NodoB<Elemento>* Arbin<Elemento>::copiarNodos(NodoB<Elemento>* ptr,int &nnodos)
 {
     NodoB<Elemento>* nuevo;
     
@@ -105,8 +154,9 @@ NodoB<Elemento>* Arbin<Elemento>::copiarNodos(NodoB<Elemento>* ptr)
     else
     {
         nuevo = new NodoB<Elemento>(ptr->obtInfo());
-        nuevo->modHd(copiarNodos(ptr->obtHd()));
-        nuevo->modHi(copiarNodos(ptr->obtHi()));
+        nnodos++;
+        nuevo->modHd(copiarNodos(ptr->obtHd(),nnodos));
+        nuevo->modHi(copiarNodos(ptr->obtHi(),nnodos));
     }
     return nuevo;
     
@@ -116,10 +166,12 @@ template <class Elemento>
 Arbin<Elemento> Arbin<Elemento>::obtHi() const
 {
     Arbin<Elemento> hijo_izq;
+    int nnodos = 0;
     
     if(this->raiz != NULL)
     {
-        hijo_izq.raiz = this->copiarNodos(this->raiz->obtHi());
+        hijo_izq.raiz = this->copiarNodos(this->raiz->obtHi(),nnodos);
+        hijo_izq.peso = nnodos;
     }
     
     return hijo_izq;
@@ -129,10 +181,11 @@ template <class Elemento>
 Arbin<Elemento> Arbin<Elemento>::obtHd() const
 {
     Arbin<Elemento> hijo_der;
-    
+    int nnodos = 0;
     if(this->raiz != NULL)
     {
-        hijo_der.raiz = this->copiarNodos(this->raiz->obtHd());
+        hijo_der.raiz = this->copiarNodos(this->raiz->obtHd(),nnodos);
+        hijo_der.peso = nnodos;
     }
    
     return hijo_der;
@@ -166,17 +219,20 @@ int Arbin<Elemento>::altura(NodoB<Elemento> *ptr)
 template <class Elemento>
 void Arbin<Elemento>::vaciar()
 {
-    this->vaciar(this->raiz);
+    int nnodos = 0;
+    this->vaciar(this->raiz,nnodos);
     this->raiz = NULL;
+    this->peso = 0;
 }
 
 template <class Elemento>
-void Arbin<Elemento>::vaciar(NodoB<Elemento>* ptr)
+void Arbin<Elemento>::vaciar(NodoB<Elemento>* ptr, int &nnodos)
 {
     if(ptr != NULL)
     {
-        vaciar(ptr->obtHi());
-        vaciar(ptr->obtHd());
+        vaciar(ptr->obtHi(),nnodos);
+        vaciar(ptr->obtHd(),nnodos);
+        nnodos++;
         delete ptr;
     }
 }
@@ -184,20 +240,27 @@ void Arbin<Elemento>::vaciar(NodoB<Elemento>* ptr)
 template <class Elemento>
 void Arbin<Elemento>::insHi(const Arbin<Elemento> &sub)
 {
-    vaciar(this->raiz->obtHi());
-    this->raiz->modHi(copiarNodos(sub.raiz));
+    int nnodos = 0;
+    vaciar(this->raiz->obtHi(),nnodos);
+    this->peso -= nnodos;
+    this->raiz->modHi(copiarNodos(sub.raiz,nnodos));
+    this->peso += sub.peso;
 }
 template <class Elemento>
 void Arbin<Elemento>::insHd(const Arbin<Elemento> &sub)
 {
-    vaciar(this->raiz->obtHd());
-    this->raiz->modHd(copiarNodos(sub.raiz));
+    int nnodos = 0;
+    vaciar(this->raiz->obtHd(),nnodos);
+    this->peso -= nnodos;
+    this->raiz->modHd(copiarNodos(sub.raiz,nnodos));
+    this->peso += sub.peso;
 }
 
 template <class Elemento>
 Arbin<Elemento>::~Arbin()
 {
-    this->vaciar(this->raiz);
+    int nnodos;
+    this->vaciar(this->raiz,nnodos);
     this->raiz = NULL;
 }
 
@@ -289,6 +352,7 @@ list<Elemento> Arbin<Elemento>::niveles() const
 template <class Elemento>
 void Arbin<Elemento>::leerPreorden(list<Elemento> &preorden,list<Elemento> &inorden)
 {
+    this->peso = preorden.size();
     this->raiz = leerPreIn(preorden,inorden);
 }
 
@@ -320,11 +384,11 @@ NodoB<Elemento>* Arbin<Elemento>::leerPreIn(list<Elemento> &preorden,list<Elemen
 }
 
 template <class Elemento>
-void Arbin<Elemento>::leerPostorden(list<Elemento> &preorden,list<Elemento> &inorden)
+void Arbin<Elemento>::leerPostorden(list<Elemento> &postorden,list<Elemento> &inorden)
 {
-    this->raiz = leerPostIn(preorden,inorden);
+    this->peso = postorden.size();
+    this->raiz = leerPostIn(postorden,inorden);
 }
-
 template <class Elemento>
 NodoB<Elemento>* Arbin<Elemento>::leerPostIn(list<Elemento> &postorden,list<Elemento> &inorden)
 {
