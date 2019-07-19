@@ -29,8 +29,6 @@ class ArbolN
         /*Impresion */
         void printHijosNivel(NodoArbolN<Elemento>* Nodo);
         void printHijosNodo(NodoArbolN<Elemento>* Nodo);
-
-
     public:
         /*Constructor */
         ArbolN();
@@ -219,7 +217,7 @@ list< ArbolN<Elemento> >  ArbolN<Elemento>::hijos() const
 template <class Elemento>
 int ArbolN<Elemento>::altura() const
 {
-	return this->altura(this->nodoRaiz);
+    return this->altura(this->nodoRaiz);
 }
 
 template <class Elemento>
@@ -229,13 +227,13 @@ int ArbolN<Elemento>::altura(NodoArbolN<Elemento> *a) const
 	int mayor, aux;
 
 	if(a == NULL)
-		return 0;
+		return -1;
 	else if(a->obtIzq() == NULL)
-		return 1;
+		return 0;
 	else
 	{
 		mayor = altura(a->obtIzq());
-		h = a->obtIzq()->obtIzq();
+		h = a->obtIzq()->obtDer();
 		while(h != NULL)
 		{
 			aux = altura(h);
@@ -246,8 +244,6 @@ int ArbolN<Elemento>::altura(NodoArbolN<Elemento> *a) const
 		return mayor + 1;
 	}
 }
-
-
 
 template <class Elemento>
 bool ArbolN<Elemento>::operator==(const ArbolN<Elemento> &a)
@@ -484,11 +480,11 @@ list<Elemento> ArbolN<Elemento>::Niveles()
 template <class Elemento>
 void ArbolN<Elemento>::recorridoPreorden(NodoArbolN<Elemento> *raiz, list<Elemento> &preorden)
 {
-    if(raiz != NULL)
+   if(raiz != NULL)
     {
         preorden.push_back(raiz->obtInfo());
-        recorridoPreorden(raiz->obtHi(), preorden);
-        recorridoPreorden(raiz->obtHd(), preorden);
+        recorridoPreorden(raiz->obtIzq(), preorden);
+        recorridoPreorden(raiz->obtDer(), preorden);
     }
 }
 

@@ -2,47 +2,55 @@
 #include "NodoArbolN.h"
 #include "ArbolN.h"
 #include <list>
+#include<bits/stdc++.h>
 
 using std::list;
 using namespace std;
 int main()
 {
     
-ArbolN<string> arbolito;
-arbolito.InsertarRaiz("papa");
+    ArbolN<int> arbolito;
+    int n,padre,hijo;
+    ifstream file;
+    file.open("casos.txt");
+    file >> n;
+    file >> padre;
+    arbolito.InsertarRaiz(padre);
+    for(int i = 1; i <= n-1; i++)
+    {
+        file >> padre >> hijo;
+        arbolito.InsertarElemento(padre,hijo);
+    }
+    auto l = arbolito.Preorden();
+    cout << "\n";
+    for(auto it = l.begin(); it != l.end();it++)
+    {
+        cout <<*it<<" ";
+    }
+    /*
+    arbolito.InsertarElemento(1,2);
+    arbolito.InsertarElemento("Maria",3);
+    arbolito.InsertarElemento("Maria",4);
+    arbolito.InsertarElemento(2,5);
+    arbolito.InsertarElemento(2,6);
+    arbolito.InsertarElemento(3,7);
+    arbolito.InsertarElemento(4,8);
+    arbolito.InsertarElemento(4,"9");
+    arbolito.InsertarElemento(4,"10");
+    arbolito.primos(6);
 
-arbolito.InsertarElemento("Maria","Luis");
-arbolito.InsertarElemento("Maria","Ana");
-arbolito.InsertarElemento("Maria","Jose");
-arbolito.InsertarElemento("Luis","Miguel");
-arbolito.InsertarElemento("Luis","Jesus");
-arbolito.InsertarElemento("Ana","Patricia");
-arbolito.InsertarElemento("Jose","Alejandra");
-arbolito.InsertarElemento("Jose","Carlos");
-arbolito.InsertarElemento("Jose","Andreina");
-arbolito.primos("Jesus");
-
-/* 
-arbolito.InsertarElemento("Luis","Pedro");
-arbolito.InsertarElemento("Luis","Ana");
-arbolito.InsertarElemento("Luis","Maria");
-arbolito.InsertarElemento("Pedro","Alejandra");
-arbolito.InsertarElemento("Alejandra","Antonio");
-arbolito.InsertarElemento("Alejandra","Carlos");
-arbolito.InsertarElemento("Ana","Diana");
-arbolito.InsertarElemento("Ana","Jose");
-arbolito.InsertarElemento("Diana","Lorena");
-arbolito.primos("Lorena");
-*/  
-  
-    
-
-  
-    
-
-
-    
-
-    
-
+    arbolito.InsertarRaiz(1);
+    arbolito.InsertarElemento(1,2);
+    arbolito.InsertarElemento(1,3);
+    arbolito.InsertarElemento(1,4);
+    arbolito.InsertarElemento(2,5);
+    arbolito.InsertarElemento(2,6);
+    arbolito.InsertarElemento(3,7);
+    arbolito.InsertarElemento(4,8);
+    arbolito.InsertarElemento(4,9);
+    arbolito.InsertarElemento(4,10);
+    arbolito.primos(6);
+   
+    */
+    cout << "\n"<< arbolito.altura();
 }

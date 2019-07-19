@@ -42,6 +42,8 @@ template <class Elemento>
 NodoArbolN<Elemento>::NodoArbolN(Elemento e)
 {
 	this->info = e;
+    this->hijoIzq = NULL;
+    this->hnoDer = NULL;
 
 }
 template<class Elemento>
