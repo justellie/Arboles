@@ -15,7 +15,7 @@ inline int max(int n1, int n2)
 template <class Elemento>
 class Arbin
 {
-    private:
+    protected:
         NodoB<Elemento> *raiz;
         int peso;
         /*** Estos métodos son recursivos qu necesitan ser privados para funcionar.
