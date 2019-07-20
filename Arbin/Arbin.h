@@ -32,6 +32,7 @@ class Arbin
         static NodoB<Elemento>* leerPreIn(list<Elemento> &preorden,list<Elemento> &inorden);
         static NodoB<Elemento>* leerPostIn(list<Elemento> &postorden,list<Elemento> &inorden);
         static void insertarNodo(NodoB<Elemento> *ptr, const Elemento &padre, const Elemento &hijo, bool &insertado);
+        static void diametroNodo(NodoB<Elemento> *ptr, int &may, int &diam);
     public:
 
     /***  Constructores  ***/
@@ -59,7 +60,7 @@ class Arbin
         */
         void leerPostorden(list<Elemento> &postorden,list<Elemento> &inorden);
         /*** Verificadores ***/
-        
+        int diametro();
         /*Retorna verdadero si la raiz es Nula, i.e no tiene info ni hijos */
         bool esNulo() const;
         Elemento obtRaiz() const;
@@ -379,7 +380,7 @@ NodoB<Elemento>* Arbin<Elemento>::leerPreIn(list<Elemento> &preorden,list<Elemen
         inorden.pop_front();
         nuevo->modHi(leerPreIn(preorden,izquierda));
         nuevo->modHd(leerPreIn(preorden,inorden));
-         return nuevo;
+        return nuevo;
     }
 }
 
@@ -417,4 +418,35 @@ Arbin<Elemento> &Arbin<Elemento>::operator=(const Arbin<Elemento> &t)
 {
     this->copiar(t);
 }
+template <class Elemento>
+int Arbin<Elemento>::diametro()
+{
+    int diam  = -1, alt = -1;
+    diametroNodo(this->raiz,diam,alt);
+    return diam;
+}
+
+template <class Elemento>
+void Arbin<Elemento>::diametroNodo(NodoB<Elemento> *ptr, int &may, int &altura)
+{
+    int diam, diam_iz = -1, diam_der = -1, alt_izq = -1, alt_der = -1;
+    if(ptr == NULL)
+    {
+        may = -1;
+        altura = -1;
+    }
+    else if(ptr->obtHi() == NULL && ptr->obtHd() == NULL)
+    {
+        may = 0;
+        altura = 0;
+    }
+    else
+    {
+        diametroNodo(ptr->obtHi(),diam_iz,alt_izq);
+        diametroNodo(ptr->obtHi(),diam_der,alt_der);
+        altura = max(alt_izq,alt_der) + 1;
+        may = max(alt_izq + alt_der + 2, max(diam_iz,diam_der));
+    }
+}
+
 #endif

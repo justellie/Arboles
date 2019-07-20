@@ -1,31 +1,45 @@
 #include <iostream>
 #include "Arbin.h"
+#include<bits/stdc++.h>
 
 using namespace std;
-
+ifstream file;
 // template <class Elemento>
-void mostrar(const list<char> &l);
-void leer(list<char> &l,const int n);
+void mostrar(const list<int> &l);
+void leer(list<int> &l,const int n);
 int main(){
 
-    Arbin<char> tree, tree2,tree3;
-    list<char> path,inorden,postorden;
+    Arbin<int> tree, tree2,tree3;
+    list<int> path,inorden,postorden,preorden;
     int n;
     char x;
-    
-    cin >> n;
-    leer(postorden,n);
-    leer(inorden,n);
-    
-    tree.leerPostorden(postorden,inorden);
-    path = tree.niveles();
-    mostrar(path);
-    tree2 = tree.obtHi();
-    tree3 = tree.obtHd();
-    inorden = tree2.inorden();
-    mostrar(inorden);
-    inorden = tree3.inorden();
-    mostrar(inorden);
+    string modo1, modo2;
+    file.open("casos.txt");
+    file >> n;
+    string in = "INORDEN", pre =  "PREORDEN";
+    cout << modo1;
+    n = 7;
+    for(int i = 1; i<= 1; i++)
+    {
+        // cin >> modo1;
+        // if(modo1.compare(pre) == 0)
+        // {
+            // leer(preorden,n);
+        // }
+        // else if((modo1.compare(in) == 0))
+        // {
+            leer(inorden,n);
+        // }
+        // else
+        // {
+            leer(postorden,n);
+        // }
+        //  cout << modo1;
+    }
+
+    !preorden.empty() ? tree.leerPreorden(preorden,inorden) : tree.leerPostorden(postorden,inorden);
+
+    cout << "\n" << tree.diametro() << "\n";
     return 0;
 }
 
@@ -42,12 +56,12 @@ void mostrar(const list<char> &l)
 }
 
 
-void leer(list<char> &l, const int n)
+void leer(list<int> &l, const int n)
 {
-    char x;
+    int x;
     for(int i = 1; i <= n; i++)
     {  
-        cin >> x;
+        file>> x;
         l.push_back(x);
     }
     
