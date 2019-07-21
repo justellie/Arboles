@@ -1,0 +1,7 @@
+Estudiante: 	Juan Pablo Herrera
+		C.I. v.26.972.881
+		Escuela de Computación (FaCyT)
+
+Materia:	Programación 2
+
+Miembros:	Unico Miembro
