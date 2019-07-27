@@ -1,0 +1,61 @@
+//Los pseudo-poliedros regulares vienen representados por los puntos de sus esquinas
+//En el arbolN estos se comprimen ordenadamente. ¿Como ordenamos puntos en el espacio?
+//Siguiendo una comparación x < x; y < y; z < z. De forma parecida a como se ordenan 
+//cadenas. De esta forma el problema de si dos pseudo poliedros regulares son iguales
+//Se reduce a si dos arbolesN son iguales. Sin embargod se debe tener en cuenta la particulaidad
+//de que el nodo raiz tiene hermanos, que son otros arboles n representando otras coordenadas
+
+
+
+
+func ArbolN::iguales(ArbolN: B): lógico
+    var
+        Apuntadorr_a NodoN arb1, abr2
+        Cola<Apuntador_a NodoN> cola1, cola2
+    inicio
+        arb1 ← instancia.raiz
+        arb2 ← B.raiz
+       //Si la cantidad de nodos es distinta, los arboles son distintos. Representan distintos poliedros
+        si((instancia.p ≠ B.p))entonces    
+            iguales ← falso
+        sino                       
+            iguales ← verdad //bandera, al principio asumimos que son iguales        
+            
+            //Encolamos el nivel 0 de cada ArbolN, debido a que tecnicamente son ArbN distintos
+            //Si no hacemos este paso y solo encolamos el primer nodo nos saltaremos lo otros sub arboles          
+            mientras(¬arb1 ≠ NULO ^ ¬arb2 ≠ NULO)hacer
+                cola1.encolar(arb1)
+                arb1 ← arb1↑.obtHd()
+                cola2.encolar(arb2)
+                arb2 ← arb2↑.obtHd()
+            fmientras
+            
+            // Si uno no es nulo quiere decir que tienen distinto numero de hermanos
+            // En ningun caso ambos pueden ser distinto de NULO sino el bucle anterior sería infinito
+            si(arb1 ≠ NULO ∨ arb2 ≠ NULO)entonces  
+                iguales ← falso
+            sino
+                mientras(¬cola1.esVacia() ∧ ¬cola2.esVacia() ^ iguales)
+                    arb1 ← cola1.frente()
+                    arb2 ← cola2.frente()
+                    cola1.desencolar()
+                    cola2.desencolar()
+                    si(arb1↑.obtInfo() ≠ arb2↑.obtInfo())entonces
+                        iguales ← falso
+                    sino // Si son distintos no tiene sentido hacer este bucle interno, solo salimos
+                        
+                        //Ambos tienen que tener la misma cantidad de hermanos
+                        //Si uno se hace nulo y el otro no significa que son distintos
+                        mientras(¬arb1 ≠ NULO ^ ¬arb2 ≠ NULO)hacer
+                            cola1.encolar(arb1)
+                            arb1 ← arb1↑.obtHd()
+                            cola2.encolar(arb2)
+                            arb2 ← arb2↑.obtHd()
+                        fmientras
+                        si(arb1 ≠ NULO ∨ arb2 ≠ NULO) //Si uno de los dos es distinto de nulo no son iguales
+                            iguales ← falso
+                        fsi    
+                fmientras
+        fsi
+        retornar iguales
+    ffunc            

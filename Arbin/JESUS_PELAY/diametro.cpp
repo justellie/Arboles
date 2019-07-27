@@ -29,9 +29,14 @@ int main(){
 		    }		
 		}
 		 !preorden.empty() ? arbol.leerPreorden(preorden,inorden) : arbol.leerPostorden		(postorden,inorden);			
-    	cout << "El diametro del arbol #"<< i << " es " << arbol.diametro() <<".\n";
+    	
+
+		cout << "El diametro del arbol #"<< i << " es " << arbol.diametro() <<".\n";
 		}
- 
+		arbol.vaciar(); 		
+		preorden.clear();
+		inorden.clear();
+		postorden.clear();
     return 0;
 }
 //Simple funcion utilitaria para leer listas
