@@ -68,6 +68,8 @@ func ArbolN::iguales(ArbolN: B): lógico
         retornar iguales
     ffunc 
 
+
+
 //Ejercicio 2
 //Emulamos el comportamiento de la pila recursiva con una pila real
 //el procedimiento recursivo seria
@@ -77,7 +79,8 @@ func ArbolN::iguales(ArbolN: B): lógico
 //      inorden(p.hijoDer)
 //  fsi    
 
-ArbolBin<Elemento>::iterativeInorder() :Lista<Elemento> 
+
+func ArbolBin<Elemento>::inordenIterativo() :Lista<Elemento> 
 var
     Pila<Apuntador_a NodoArbolBin<Elemento>> recorrido
     Lista<Elemento> lista_recorrido
@@ -86,26 +89,31 @@ inicio
     recorrido.contruir()
     lista_recorrido.contruir()
     p ← instancia.raiz
-    mientras (¬recorrido.esVacia() ∨ p ≠ NULO) hacer
+    mientras (¬recorrido.esVacia() v p ≠ NULO) hacer
             //Nos aseguramos de ir lo más a la izquierda posible
             // si encontramos un puntero nulo es como cuando hacemos una llamada
             //Y encuentra un nodo nulo
-            si (p ≠ NULO)entonces
+        
+            si (p≠ NULO)entonces
                 recorrido.apilar(p)
                 p ←p↑.obtHi()
+
+
             sino 
                 //Si encontramos un nodo nulo
                 //significa que llegamos al final del subarbol izquierdo
                 //por lo tanto es el momento de visitar el nodo e iterar por el
-                //subarbol derecho
                 p ← recorrido.tope()
                 recorrido.desapilar()
                 lista_recorrido.insertar(p↑info())
-                p ← p↑.obtHd()
+                p ←p↑.obtHd()
+
             fsi           
     fmientras  
     retornar(lista_recorrido)
-ffunc
+ffunc 
+
+
 
 Ejercicio 3
 
@@ -150,29 +158,3 @@ proc ArBin::esZurdo(apuntador_a NodoB ptr, entero n_nodos, logico zurdo)
     fproc   
             
 
-func ArbolBin<Elemento>::inordenIterativo() :Lista<Elemento> 
-var
-    Pila<Apuntador_a NodoArbolBin<Elemento>> recorrido
-    Lista<Elemento> lista_recorrido
-    Apuntador_a NodoArbolBin<Elemento> p 
-inicio
-    recorrido.contruir()
-    lista_recorrido.contruir()
-    p ← instancia.raiz
-    mientras (¬recorrido.esVacia() v p ≠ NULO) hacer
-        
-            si (p≠ NULO)entonces
-                recorrido.apilar(p)
-                p ←p↑.obtHi()
-
-
-            sino 
-                p ← recorrido.tope()
-                recorrido.desapilar()
-                lista_recorrido.insertar(p↑info())
-                p ←p↑.obtHd()
-
-            fsi           
-    fmientras  
-    retornar(lista_recorrido)
-ffunc 
