@@ -6,9 +6,6 @@
 //Sin embargo se debe tener en cuenta la particulaidad
 //de que el nodo raiz tiene hermanos, que son otros arboles n representando otras coordenadas
 
-
-
-
 func ArbolN::iguales(ArbolN: B): lógico
     var
         Apuntadorr_a NodoN arb1, abr2
@@ -20,11 +17,13 @@ func ArbolN::iguales(ArbolN: B): lógico
         si((instancia.p ≠ B.p))entonces    
             iguales ← falso
         sino                       
+            cola1.construir()
+            cola2.construir()
             iguales ← verdad //bandera, al principio asumimos que son iguales        
-            
+    
             //Encolamos el nivel 0 de cada ArbolN, debido a que tecnicamente son ArbN distintos
             //Si no hacemos este paso y solo encolamos el primer nodo nos saltaremos lo otros sub arboles          
-            mientras(arb1 ≠ NULO ^ arb2 ≠ NULO)hacer
+            mientras(arb1 ≠ NULO ∧ arb2 ≠ NULO)hacer
                 cola1.encolar(arb1)
                 arb1 ← arb1↑.obtHd()
                 cola2.encolar(arb2)
@@ -47,22 +46,20 @@ func ArbolN::iguales(ArbolN: B): lógico
                         
                         //Ambos tienen que tener la misma cantidad de hermanos
                         //Si uno se hace nulo y el otro no significa que son distintos
-                        arb1 <- arb1\.obtHi()
-                        mientras(¬arb1 ≠ NULO ^ ¬arb2 ≠ NULO)hacer
+                        arb1 ← arb1↑.obtHi()
+                        arb2 ← arb2↑.obtHi()
+                        mientras(arb1 ≠ NULO ∧ arb2 ≠ NULO)hacer
                             cola1.encolar(arb1)
                             arb1 ← arb1↑.obtHd()
                             cola2.encolar(arb2)
-                            arb2 ← arb2↑.obtHd()
-                            si(arb1↑.obtInfo() ≠ arb2↑.obtInfo())entonces //Si son distintos terminamos rapido
-                                iguales ← falso
-                            fsi    
+                            arb2 ← arb2↑.obtHd()  
                         fmientras
                         si(arb1 ≠ NULO ∨ arb2 ≠ NULO) //Si uno de los dos es distinto de nulo no son iguales
                             iguales ← falso
                         fsi    
                 fmientras
-                si((cola1.esVacia() ^ ¬cola2.esVacia()) || (¬cola1.esVacia() ^ cola2.esVacia()))
-                    iguales <- falso
+                si((cola1.esVacia() ∧ ¬cola2.esVacia()) ∨ (¬cola1.esVacia() ∧ cola2.esVacia()))
+                    iguales ← falso
                 fsi    
         fsi
         retornar iguales
