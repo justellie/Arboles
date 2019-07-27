@@ -150,7 +150,7 @@ proc ArBin::esZurdo(apuntador_a NodoB ptr, entero n_nodos, logico zurdo)
     fproc   
             
 
-ArbolBin<Elemento>::inordenIterativo() :Lista<Elemento> 
+func ArbolBin<Elemento>::inordenIterativo() :Lista<Elemento> 
 var
     Pila<Apuntador_a NodoArbolBin<Elemento>> recorrido
     Lista<Elemento> lista_recorrido
