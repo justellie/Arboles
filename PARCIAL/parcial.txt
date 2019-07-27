@@ -66,4 +66,113 @@ func ArbolN::iguales(ArbolN: B): lógico
                 fsi    
         fsi
         retornar iguales
-    ffunc            
+    ffunc 
+
+//Ejercicio 2
+//Emulamos el comportamiento de la pila recursiva con una pila real
+//el procedimiento recursivo seria
+// si(p ≠ nulo)
+//      inorden(p.hijoIzq)
+//      visitar(p)
+//      inorden(p.hijoDer)
+//  fsi    
+
+ArbolBin<Elemento>::iterativeInorder() :Lista<Elemento> 
+var
+    Pila<Apuntador_a NodoArbolBin<Elemento>> recorrido
+    Lista<Elemento> lista_recorrido
+    Apuntador_a NodoArbolBin<Elemento> p 
+inicio
+    recorrido.contruir()
+    lista_recorrido.contruir()
+    p ← instancia.raiz
+    mientras (¬recorrido.esVacia() ∨ p ≠ NULO) hacer
+            //Nos aseguramos de ir lo más a la izquierda posible
+            // si encontramos un puntero nulo es como cuando hacemos una llamada
+            //Y encuentra un nodo nulo
+            si (p ≠ NULO)entonces
+                recorrido.apilar(p)
+                p ←p↑.obtHi()
+            sino 
+                //Si encontramos un nodo nulo
+                //significa que llegamos al final del subarbol izquierdo
+                //por lo tanto es el momento de visitar el nodo e iterar por el
+                //subarbol derecho
+                p ← recorrido.tope()
+                p ← recorrido.desapilar()
+                lista_recorrido.insertar(p↑info())
+                p ←p↑.obtHd()
+            fsi           
+    fmientras  
+    retornar(lista_recorrido)
+ffunc
+
+Ejercicio 3
+
+//Este es el metodo publico, como se necesitan apuntadores
+//se crea otro metodo privado
+
+func ArBin::esZurdo() : lógico
+    var
+        entero n_nodos
+        logico zurdo
+    inicio
+        n_nodos ← 0
+        zurdo ← falso
+        esZurdo(instancia.nodoRaiz,n_nodos,zurdo)
+        retornar zurdo
+    ffunc
+
+proc ArBin::esZurdo(apuntador_a NodoB ptr, entero n_nodos, logico zurdo)
+    var
+        entero n_nodos_izq, n_nodos_der
+        logico zurdo_izq, zurdo_der
+    inicio
+        si(ptr = NULO) entonces //El arbol es vacio es zurdo
+            zurdo ← verdad
+            n_nodos ← 1
+        sino    
+            si(ptr↑.obtHi() = NULO ∧ ptr↑.obtHd() = NULO) entonces //El arbol es hoja, tambien es zurdo
+                zurdo = verdad
+                n_nodos ← 1
+            sino
+                //La tecnica es ir desde el final del arbol hacia arriba
+                //verificando que los subarboles tambien sean zurdos
+                //para ello tomamos en cuenta el numero de nodos de cada subarboles
+                //Y comparamos si tieme mas de la mitad en el dubarbol izq
+                
+                esZurdo(ptr↑.obtHi(),n_nodos_izq,zurdo_izq)
+                esZurdo(ptr↑.obtHd(),n_nodos_der,zurdo_der)
+                n_nodos ← n_nodos_izq + n_nodos_der + 1
+                zurdo ← zurdo_izq ∧ zurdo_der ∧ n_nodos_izq > (n_nodos_der+n_nodos_izq)div(2)        
+            fsi
+        fsi 
+    fproc   
+            
+
+ArbolBin<Elemento>::iterativeInorder() :Lista<Elemento> 
+var
+    Pila<Apuntador_a NodoArbolBin<Elemento>> recorrido
+    Lista<Elemento> lista_recorrido
+    Apuntador_a NodoArbolBin<Elemento> p 
+inicio
+    recorrido.contruir()
+    lista_recorrido.contruir()
+    p ← instancia.raiz
+    mientras (¬recorrido.esVacia() v p ≠ NULO) hacer
+        
+            si (p≠ NULO)entonces
+                recorrido.apilar(p)
+                p ←p↑.obtHi()
+
+
+            sino 
+                p ← recorrido.tope()
+                p ← recorrido.desapilar()
+                lista_recorrido.insertar(p↑info())
+                p ←p↑.obtHd()
+
+            fsi           
+    fmientras  
+    retornar(lista_recorrido)
+ffunc 
