@@ -48,11 +48,14 @@ func ArbolN::iguales(ArbolN: B): lógico
                         //Si uno se hace nulo y el otro no significa que son distintos
                         arb1 ← arb1↑.obtHi()
                         arb2 ← arb2↑.obtHi()
-                        mientras(arb1 ≠ NULO ∧ arb2 ≠ NULO)hacer
+                        mientras((arb1 ≠ NULO ∧ arb2 ≠ NULO)∧ iguales)hacer
                             cola1.encolar(arb1)
                             arb1 ← arb1↑.obtHd()
                             cola2.encolar(arb2)
                             arb2 ← arb2↑.obtHd()  
+                            si(arb1\.obtInfo() ≠  arb2\.obtInfo())entonces
+                                iguales <- falso
+                            fsi
                         fmientras
                         si(arb1 ≠ NULO ∨ arb2 ≠ NULO) //Si uno de los dos es distinto de nulo no son iguales
                             iguales ← falso

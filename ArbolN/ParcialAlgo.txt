@@ -1,0 +1,54 @@
+
+func ArbolN::iguales(ArbolN: B): lógico
+    var
+        Apuntadorr_a NodoN arb1, abr2
+        Cola<Apuntador_a NodoN> cola1, cola2
+    inicio
+       
+       //Si la cantidad de nodos es distinta, los arboles son distintos. Representan distintos poliedros
+        si((instancia.p != B.p))entonces    
+            iguales ← falso
+        sino
+                               
+            iguales <- verdad //bandera, al principio asumimos que son iguales        
+            
+            //Encolamos el nivel 0 de cada ArbolN, debido a que tecnicamente son ArbN distintos
+            //Si no hacemos este paso y solo encolamos el primer nodo nos saltaremos lo otros sub arboles          
+            si(¬arb1 != NULO ^ ¬arb2 != NULO)hacer
+                cola1.contruir()
+                cola2.contruir()
+                cola1.encolar(instancia.raiz)
+                cola2.encolar(B.raiz)    
+            fsi
+            
+            // Si uno no es nulo quiere decir que tienen distinto numero de hermanos
+            // En ningun caso ambos pueden ser distinto de NULO sino el bucle anterior sería infinito
+            si(cola1.frente() != NULO ∨ cola2.frente() != NULO)entonces  
+                iguales <- falso
+            sino
+                mientras(¬cola1.esVacia() ∧ ¬cola2.esVacia() ^ iguales)
+                    arb1 <- cola1.frente()\.obtHi()
+                    arb2 <- cola2.frente()\.obtHi()
+                    cola1.desencolar()
+                    cola2.desencolar()
+                    si(arb1\.obtInfo() != arb2\.obtInfo())entonces
+                        iguales <- falso
+                    fsi
+                    //Ambos tienen que tener la misma cantidad de hermanos
+                    //Si uno se hace nulo y el otro no significa que son distintos
+                    mientras((¬arb1 != NULO ^ ¬arb2 != NULO) ∧  iguales)hacer
+                        cola1.encolar(arb1)
+                        cola2.encolar(arb2)
+                        arb1 <- arb1\.obtHd()
+                        arb2 <- arb2\.obtHd()
+                        si(arb1\.obtInfo() != arb2\.obtInfo())entonces
+                            iguales <- falso
+                        fsi
+                    fmientras
+                    si(arb1 != NULO ∨ arb2 != NULO) //Si uno de los dos es distinto de nulo no son iguales
+                        iguales <- falso
+                    fsi    
+                fmientras
+        fsi
+        retornar iguales
+    ffunc
