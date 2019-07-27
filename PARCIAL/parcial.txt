@@ -99,9 +99,9 @@ inicio
                 //por lo tanto es el momento de visitar el nodo e iterar por el
                 //subarbol derecho
                 p ← recorrido.tope()
-                p ← recorrido.desapilar()
+                recorrido.desapilar()
                 lista_recorrido.insertar(p↑info())
-                p ←p↑.obtHd()
+                p ← p↑.obtHd()
             fsi           
     fmientras  
     retornar(lista_recorrido)
