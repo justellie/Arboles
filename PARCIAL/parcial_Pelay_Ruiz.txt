@@ -1,3 +1,9 @@
+Integrantes:
+
+Jesús Pelay C.I 26.804.859
+Elio Ruiz C.I 27.877.261
+
+
 //Los pseudo-poliedros regulares vienen representados por los puntos de sus esquinas
 //En el arbolN estos se comprimen ordenadamente. ¿Como ordenamos puntos en el espacio?
 //Siguiendo una comparación x < x; y < y; z < z. De forma parecida a como se ordenan 
@@ -10,6 +16,7 @@ func ArbolN::iguales(ArbolN: B): lógico
     var
         Apuntadorr_a NodoN arb1, abr2
         Cola<Apuntador_a NodoN> cola1, cola2
+        logico iguales
     inicio
         arb1 ← instancia.raiz
         arb2 ← B.raiz
@@ -48,13 +55,14 @@ func ArbolN::iguales(ArbolN: B): lógico
                         //Si uno se hace nulo y el otro no significa que son distintos
                         arb1 ← arb1↑.obtHi()
                         arb2 ← arb2↑.obtHi()
-                        mientras((arb1 ≠ NULO ∧ arb2 ≠ NULO)∧ iguales)hacer
+                        mientras((arb1 ≠ NULO ∧ arb2 ≠ NULO) ∧ iguales)hacer
                             cola1.encolar(arb1)
                             arb1 ← arb1↑.obtHd()
                             cola2.encolar(arb2)
                             arb2 ← arb2↑.obtHd()  
-                            si(arb1\.obtInfo() ≠  arb2\.obtInfo())entonces
-                                iguales <- falso
+                            //checamos temprano por igualdad y nos ahorramos iteraciones
+                            si(arb1↑.obtInfo() ≠  arb2↑.obtInfo())entonces
+                                iguales ← falso
                             fsi
                         fmientras
                         si(arb1 ≠ NULO ∨ arb2 ≠ NULO) //Si uno de los dos es distinto de nulo no son iguales
@@ -80,38 +88,41 @@ func ArbolN::iguales(ArbolN: B): lógico
 //  fsi    
 
 
-func ArbolBin<Elemento>::inordenIterativo() :Lista<Elemento> 
-var
-    Pila<Apuntador_a NodoArbolBin<Elemento>> recorrido
-    Lista<Elemento> lista_recorrido
-    Apuntador_a NodoArbolBin<Elemento> p 
-inicio
-    recorrido.contruir()
-    lista_recorrido.contruir()
-    p ← instancia.raiz
-    mientras (¬recorrido.esVacia() v p ≠ NULO) hacer
-            //Nos aseguramos de ir lo más a la izquierda posible
-            // si encontramos un puntero nulo es como cuando hacemos una llamada
-            //Y encuentra un nodo nulo
-        
-            si (p≠ NULO)entonces
-                recorrido.apilar(p)
-                p ←p↑.obtHi()
+proc ArbolBin<Elemento>::inordenIterativo(ref Lista<Elemento> lista_recorrido)
+    var
+        Pila<Apuntador_a NodoArbolBin<Elemento>> recorrido
+        Pila<Elemento> inor_aux
+        Lista<Elemento> lista_recorrido
+        Apuntador_a NodoArbolBin<Elemento> p 
+    inicio
+        recorrido.contruir()
+        lista_recorrido.contruir()
+        p ← instancia.raiz
+        mientras (¬recorrido.esVacia() ∨ p ≠ NULO) hacer
+                //Nos aseguramos de ir lo más a la izquierda posible
+                // si encontramos un puntero nulo es como cuando hacemos una llamada
+                //Y encuentra un nodo nulo
+            
+                si (p≠ NULO)entonces
+                    recorrido.apilar(p)
+                    p ←p↑.obtHi()
 
-
-            sino 
-                //Si encontramos un nodo nulo
-                //significa que llegamos al final del subarbol izquierdo
-                //por lo tanto es el momento de visitar el nodo e iterar por el
-                p ← recorrido.tope()
-                recorrido.desapilar()
-                lista_recorrido.insertar(p↑info())
-                p ←p↑.obtHd()
-
-            fsi           
-    fmientras  
-    retornar(lista_recorrido)
-ffunc 
+                sino 
+                    //Si encontramos un nodo nulo
+                    //significa que llegamos al final del subarbol izquierdo
+                    //por lo tanto es el momento de visitar el nodo e iterar por el
+                    p ← recorrido.tope()
+                    recorrido.desapilar()
+                    inor_aux.apilar(p↑.info())
+                    p ←p↑.obtHd()
+                fsi
+                //Invertimos la pila y la guardamos en la lista
+                mientras(¬inor_aux.esVacia())hacer
+                    lista_recorrido.insertar(inor_aux.tope(),1)
+                    inor_aux.desapilar()
+                fmientras               
+        fmientras  
+    fproc 
 
 
 
@@ -131,14 +142,14 @@ func ArBin::esZurdo() : lógico
         retornar zurdo
     ffunc
 
-proc ArBin::esZurdo(apuntador_a NodoB ptr, entero n_nodos, logico zurdo)
+proc ArBin::esZurdo(apuntador_a NodoB ptr, ref entero n_nodos, ref logico zurdo)
     var
         entero n_nodos_izq, n_nodos_der
         logico zurdo_izq, zurdo_der
     inicio
         si(ptr = NULO) entonces //El arbol es vacio es zurdo
             zurdo ← verdad
-            n_nodos ← 1
+            n_nodos ← 0
         sino    
             si(ptr↑.obtHi() = NULO ∧ ptr↑.obtHd() = NULO) entonces //El arbol es hoja, tambien es zurdo
                 zurdo = verdad

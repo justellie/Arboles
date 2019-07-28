@@ -3,6 +3,7 @@ func ArbolN::iguales(ArbolN: B): lógico
     var
         Apuntadorr_a NodoN arb1, abr2
         Cola<Apuntador_a NodoN> cola1, cola2
+        logico iguales
     inicio
        
        //Si la cantidad de nodos es distinta, los arboles son distintos. Representan distintos poliedros
